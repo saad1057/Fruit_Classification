@@ -17,15 +17,13 @@ class_names = [
     "watermelon_fruit"
 ]
 
-# ✅ Define transform (same as validation)
 transform = transforms.Compose([
-    transforms.Resize((224, 224)),  # Match img_size
+    transforms.Resize((224, 224)),  
     transforms.ToTensor(),
     transforms.Normalize([0.485, 0.456, 0.406],
                          [0.229, 0.224, 0.225])
 ])
 
-# ✅ Load model
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 model = models.resnet18()
 model.fc = nn.Sequential(
@@ -38,7 +36,6 @@ model.load_state_dict(torch.load("checkpoints/resnet18_fruit.pth", map_location=
 model = model.to(device)
 model.eval()
 
-# ✅ Prediction Function
 def predict_image(image_path):
     image = Image.open(image_path).convert("RGB")
     image = transform(image).unsqueeze(0).to(device)
@@ -50,11 +47,10 @@ def predict_image(image_path):
 
     return predicted_class
 
-# ✅ Test it
 if __name__ == "__main__":
-    test_image_path = "test_images/orange.jpg"  # Change this to your test image
+    test_image_path = "test_images/apple2.jpg"  
     if os.path.exists(test_image_path):
         prediction = predict_image(test_image_path)
-        print(f"🍓 Predicted Fruit: {prediction}")
+        print(f"Predicted Fruit: {prediction}")
     else:
-        print("❌ Image path not found.")
+        print("Image path not found.")
